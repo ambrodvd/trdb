@@ -4,8 +4,8 @@ const CONFIG = {
   NOME_SITO: "TRAIL RACE DATABASE"
 };
 
-const VOCI = [["org","Organizzazione"],["bel","Bellezza percorso"],["seg","Segnalazione"],
-              ["ris","Ristori"],["loc","Località"],["atm","Atmosfera"]];
+const VOCI = [["org","Organizzazione"],["bel","Bellezza percorso"],["seg","Balisaggio"],
+              ["ris","Ristori"],["loc","Bellezza località"],["atm","Atmosfera"]];
 const TERRENI = ["Trail","Strada","Misto"];
 const MESI = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
 
