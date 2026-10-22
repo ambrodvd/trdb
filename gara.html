@@ -25,6 +25,9 @@ caricaDati().then(tutte => {
   if (!rows.length) { document.getElementById("conta").textContent = "Gara non trovata."; return; }
   document.title = rows[0].nome;
   document.getElementById("nome").textContent = rows[0].nome;
+  const sitoUff = ([...rows].reverse().find(r => r.sito) || {}).sito;
+  if (sitoUff && /^https?:\/\//i.test(sitoUff)) document.getElementById("nome").insertAdjacentHTML("afterend",
+    `<p>Sito ufficiale: <a href="${esc(sitoUff)}" target="_blank" rel="noopener">${esc(sitoUff)}</a></p>`);
   const tot = rows.reduce((s, r) => s + r.n, 0);
   document.getElementById("conta").innerHTML =
     `Media generale di tutte le edizioni: ${stelle(media(rows.map(r => r.medie.gen)))} · ${tot} recensioni`;
