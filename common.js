@@ -28,7 +28,12 @@ function errore(e) {
 }
 
 /* ====== TESTATA E PIEDE ====== */
+function titoloScheda(t) {
+  document.title = (t && t !== "Home") ? "Trail Race Database – " + t : "Trail Race Database";
+}
+
 function pagina(attiva) {
+  titoloScheda(document.title);
   const voci = [["index.html","Home"],["elenco.html","Elenco gare"],["mappa.html","Mappa"],["calendario.html","Calendario"],
                 ["invia.html","Invia una gara"],["privacy.html","Privacy"]];
   const nav = voci.map(([h, t]) => {
