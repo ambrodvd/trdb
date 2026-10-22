@@ -36,7 +36,7 @@ function pagina(attiva) {
     return (h === attiva ? `<b>[ ${t} ]</b>` : `<a href="${h}">${t}</a>`) + nuovo;
   }).join(" | ");
   document.getElementById("testa").innerHTML = `
-    <h1>~*~ ${esc(CONFIG.NOME_SITO)} ~*~</h1>
+    <h1><a href="index.html" title="Torna alla home">~*~ ${esc(CONFIG.NOME_SITO)} ~*~</a></h1>
     <div class="sottotitolo">Le gare trail di tutto il mondo, recensite da chi le ha corse</div>
     <marquee scrollamount="4">+++ Benvenuto! +++ Hai corso una gara? Recensiscila nella pagina INVIA UNA GARA +++
       ${CONFIG.API_URL ? "" : "ATTENZIONE: stai vedendo DATI DI ESEMPIO +++"}</marquee>
