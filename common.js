@@ -65,21 +65,27 @@ async function caricaDati() {
 /* ====== FILTRI (uguali su elenco, mappa, calendario) ====== */
 function disegnaFiltri(onChange) {
   const sel = name => `<select name="${name}"><option value="">-</option>${[1,2,3,4,5].map(i => `<option value="${i}">≥ ${i}</option>`).join("")}</select>`;
+  const campo = (lab, html) => `<label class="campo"><span>${lab}</span>${html}</label>`;
   const box = document.getElementById("filtri");
   box.innerHTML = `
-  <form id="ff" class="filtri"><fieldset><legend>Filtri</legend>
-  <table>
-    <tr><td>Cerca (nome o luogo)</td><td colspan="3"><input name="q" size="30"></td>
-        <td>Terreno</td><td><select name="terreno"><option value="">Tutti</option>${TERRENI.map(t => `<option>${t}</option>`).join("")}</select></td></tr>
-    <tr><td>Dal</td><td><input type="date" name="dal"></td><td>Al</td><td><input type="date" name="al"></td><td></td><td></td></tr>
-    <tr><td>Km da</td><td><input type="number" name="kmMin" min="0" style="width:5em"> a <input type="number" name="kmMax" min="0" style="width:5em"></td>
-        <td>D+ da</td><td><input type="number" name="dpMin" min="0" style="width:5em"> a <input type="number" name="dpMax" min="0" style="width:5em"> m</td>
-        <td></td><td></td></tr>
-  </table>
-  <table><tr><th>Media</th>${VOCI.map(([, t]) => `<th>${t}</th>`).join("")}</tr>
-         <tr><td>${sel("gen")}</td>${VOCI.map(([k]) => `<td>${sel(k)}</td>`).join("")}</tr></table>
+  <form id="ff" class="filtri"><details ${window.innerWidth > 700 ? "open" : ""}>
+  <summary>FILTRI (tocca per aprire/chiudere)</summary>
+  <div class="riga">
+    ${campo("Cerca (nome o luogo)", `<input name="q">`)}
+    ${campo("Terreno", `<select name="terreno"><option value="">Tutti</option>${TERRENI.map(t => `<option>${t}</option>`).join("")}</select>`)}
+    ${campo("Dal", `<input type="date" name="dal">`)}
+    ${campo("Al", `<input type="date" name="al">`)}
+    ${campo("Km da", `<input type="number" name="kmMin" min="0">`)}
+    ${campo("Km a", `<input type="number" name="kmMax" min="0">`)}
+    ${campo("D+ da (m)", `<input type="number" name="dpMin" min="0">`)}
+    ${campo("D+ a (m)", `<input type="number" name="dpMax" min="0">`)}
+  </div>
+  <div class="riga">
+    ${campo("Media generale", sel("gen"))}
+    ${VOCI.map(([k, t]) => campo(t, sel(k))).join("")}
+  </div>
   <p><input type="reset" value="Azzera filtri"></p>
-  </fieldset></form>`;
+  </details></form>`;
   const f = document.getElementById("ff");
   f.addEventListener("input", onChange);
   f.addEventListener("change", onChange);
