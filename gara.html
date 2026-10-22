@@ -23,7 +23,7 @@ const id = new URLSearchParams(location.search).get("id");
 caricaDati().then(tutte => {
   const rows = tutte.filter(r => r.id === id);
   if (!rows.length) { document.getElementById("conta").textContent = "Gara non trovata."; return; }
-  document.title = rows[0].nome;
+  titoloScheda(rows[0].nome);
   document.getElementById("nome").textContent = rows[0].nome;
   const sitoUff = ([...rows].reverse().find(r => r.sito) || {}).sito;
   if (sitoUff && /^https?:\/\//i.test(sitoUff)) document.getElementById("nome").insertAdjacentHTML("afterend",
