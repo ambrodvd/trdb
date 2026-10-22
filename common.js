@@ -44,6 +44,8 @@ function pagina(attiva) {
   document.getElementById("piede").innerHTML = `
     <hr><div class="piede">© ${new Date().getFullYear()} ${esc(CONFIG.NOME_SITO)} ·
     Ottimizzato per Netscape Navigator 4.0 a 800x600 · <a href="privacy.html">Privacy</a>
+    <br>Sito creato da <a href="https://ultranerdrun.substack.com/" target="_blank" rel="noopener">Ultranerd</a> ·
+    ☕ Ti piace? <a href="https://buymeacoffee.com/ultranerd" target="_blank" rel="noopener">Offrimi un caffè!</a>
     <br><span id="agg"></span></div>`;
 }
 
