@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invia una gara</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body><div class="cornice">
+<div id="testa"></div>
+
+<h2>Invia una gara</h2>
+<p>Hai corso una gara? Raccontaci com'è andata! Ogni recensione viene controllata prima della pubblicazione.
+I campi con <b>*</b> sono obbligatori.</p>
+
+<form id="f">
+<fieldset><legend>1. La gara</legend>
+<table class="modulo">
+  <tr><td>Nome gara *</td><td><input name="gara" required maxlength="120" size="40"></td></tr>
+  <tr><td>Data *</td><td><input type="date" name="data" id="data" required></td></tr>
+  <tr><td>Luogo *<br><small>es. Courmayeur, Italia</small></td><td><input name="luogo" required maxlength="120" size="40"></td></tr>
+  <tr><td>Distanza (km) *</td><td><input type="number" name="km" required min="1" max="1000" step="0.1" style="width:6em"></td></tr>
+  <tr><td>Dislivello positivo (m) *</td><td><input type="number" name="dplus" required min="0" max="50000" step="1" style="width:6em"></td></tr>
+  <tr><td>Terreno *</td><td id="terreni"></td></tr>
+</table>
+</fieldset>
+
+<fieldset><legend>2. La tua valutazione (1 = pessimo, 5 = eccellente)</legend>
+<table class="modulo" id="voti"></table>
+</fieldset>
+
+<fieldset><legend>3. Commento libero</legend>
+<textarea name="commento" rows="6" cols="60" maxlength="3000" style="max-width:100%"></textarea>
+</fieldset>
+
+<fieldset><legend>4. Chi sei (NON verrà pubblicato)</legend>
+<table class="modulo">
+  <tr><td>Link al tuo risultato *<br><small>classifica ufficiale, ITRA, ecc.</small></td><td><input type="url" name="link" required maxlength="500" size="40"></td></tr>
+  <tr><td>Nome *</td><td><input name="nome" required maxlength="60"></td></tr>
+  <tr><td>Cognome *</td><td><input name="cognome" required maxlength="60"></td></tr>
+  <tr><td>Email *</td><td><input type="email" name="email" required maxlength="120" size="30"></td></tr>
+</table>
+</fieldset>
+
+<p class="trappola"><label>Non compilare questo campo: <input name="sito" tabindex="-1" autocomplete="off"></label></p>
+<p><label><input type="checkbox" name="consenso" required>
+  Ho letto l'<a href="privacy.html" target="_blank">informativa privacy</a> e acconsento al trattamento dei miei dati *</label></p>
+<p><input type="submit" value="  INVIA  "> <input type="reset" value="Cancella"></p>
+</form>
+<div id="esito"></div>
+
+<div id="piede"></div>
+</div>
+<script src="common.js"></script>
+<script>
+pagina("invia.html");
+document.getElementById("data").max = new Date().toISOString().slice(0, 10);
+document.getElementById("terreni").innerHTML = TERRENI.map((t, i) =>
+  `<label><input type="radio" name="terreno" value="${t}" ${i === 0 ? "required" : ""}> ${t}</label>`).join(" &nbsp; ");
+document.getElementById("voti").innerHTML = VOCI.map(([k, t]) => `<tr><td>${t} *</td><td>` +
+  [1,2,3,4,5].map(i => `<label><input type="radio" name="${k}" value="${i}" ${i === 1 ? "required" : ""}> ${i}</label>`).join(" &nbsp; ") +
+  `</td></tr>`).join("");
+
+const f = document.getElementById("f");
+const esito = (html, cls) => document.getElementById("esito").innerHTML = `<span class="${cls || ""}">${html}</span>`;
+f.onsubmit = async e => {
+  e.preventDefault();
+  const fd = new FormData(f);
+  const d = Object.fromEntries(fd);
+  d.consenso = fd.get("consenso") === "on";
+  d.km = Number(d.km); d.dplus = Number(d.dplus);
+  VOCI.forEach(([k]) => d[k] = Number(d[k]));
+  const btn = f.querySelector("[type=submit]");
+  btn.disabled = true;
+  esito("Invio in corso...");
+  if (!CONFIG.API_URL) {
+    esito("MODALITÀ DEMO: il modulo funziona, ma non è ancora collegato al foglio Google.", "ko");
+    btn.disabled = false; return;
+  }
+  try {
+    const r = await fetch(CONFIG.API_URL, { method: "POST", body: JSON.stringify(d) });
+    const j = await r.json();
+    if (j.ok) {
+      f.reset(); f.style.display = "none";
+      esito("<b>Grazie!</b> Abbiamo ricevuto la tua recensione. Ti abbiamo mandato una mail di conferma: la pubblicheremo appena verificata.", "ok");
+    } else esito("Errore: " + esc(j.errore), "ko");
+  } catch (x) {
+    esito("Errore di connessione, riprova.", "ko");
+  }
+  btn.disabled = false;
+};
+</script>
+</body>
+</html>

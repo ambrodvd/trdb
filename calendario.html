@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calendario gare</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body><div class="cornice">
+<div id="testa"></div>
+
+<h2>Calendario</h2>
+<div id="filtri"></div>
+<p id="conta">Caricamento...</p>
+<p style="text-align:center">
+  <button id="prec">&lt;&lt; Mese prec.</button>
+  <b id="titolo" style="font-size:18px;margin:0 14px"></b>
+  <button id="succ">Mese succ. &gt;&gt;</button>
+  <button id="oggi">Oggi</button>
+</p>
+<div id="griglia"></div>
+
+<div id="piede"></div>
+</div>
+<script src="common.js"></script>
+<script>
+pagina("calendario.html");
+let RIGHE = [], y = new Date().getFullYear(), m = new Date().getMonth();
+function disegna() {
+  const rows = filtra(RIGHE);
+  const pref = `${y}-${String(m + 1).padStart(2, "0")}`;
+  const delMese = rows.filter(r => r.data.startsWith(pref));
+  const giorni = new Date(y, m + 1, 0).getDate();
+  const primo = (new Date(y, m, 1).getDay() + 6) % 7;   // lunedì = 0
+  let h = `<table class="cal"><tr>${["Lun","Mar","Mer","Gio","Ven","Sab","Dom"].map(d => `<th>${d}</th>`).join("")}</tr><tr>`;
+  for (let i = 0; i < primo; i++) h += `<td class="vuoto"></td>`;
+  for (let d = 1; d <= giorni; d++) {
+    const iso = pref + "-" + String(d).padStart(2, "0");
+    const g = delMese.filter(r => r.data === iso);
+    h += `<td${g.length ? ' class="pieno"' : ""}><div class="g">${d}</div>` +
+      g.map(r => `${linkGara(r)} <small>${r.km} km</small>`).join("<br>") + `</td>`;
+    if ((primo + d) % 7 === 0 && d < giorni) h += "</tr><tr>";
+  }
+  const resto = (7 - (primo + giorni) % 7) % 7;
+  for (let i = 0; i < resto; i++) h += `<td class="vuoto"></td>`;
+  h += "</tr></table>";
+  document.getElementById("griglia").innerHTML = h;
+  document.getElementById("titolo").textContent = MESI[m] + " " + y;
+  document.getElementById("conta").textContent = delMese.length + " gare in questo mese";
+}
+document.getElementById("prec").onclick = () => { m--; if (m < 0) { m = 11; y--; } disegna(); };
+document.getElementById("succ").onclick = () => { m++; if (m > 11) { m = 0; y++; } disegna(); };
+document.getElementById("oggi").onclick = () => { y = new Date().getFullYear(); m = new Date().getMonth(); disegna(); };
+disegnaFiltri(disegna);
+caricaDati().then(r => { RIGHE = r; disegna(); }).catch(errore);
+</script>
+</body>
+</html>

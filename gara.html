@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scheda gara</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body><div class="cornice">
+<div id="testa"></div>
+
+<h2 id="nome">Scheda gara</h2>
+<p id="conta">Caricamento...</p>
+<div id="scheda"></div>
+<p><a href="index.html">&lt;&lt; Torna all'elenco</a></p>
+
+<div id="piede"></div>
+</div>
+<script src="common.js"></script>
+<script>
+pagina("");
+const id = new URLSearchParams(location.search).get("id");
+caricaDati().then(tutte => {
+  const rows = tutte.filter(r => r.id === id);
+  if (!rows.length) { document.getElementById("conta").textContent = "Gara non trovata."; return; }
+  document.title = rows[0].nome;
+  document.getElementById("nome").textContent = rows[0].nome;
+  const tot = rows.reduce((s, r) => s + r.n, 0);
+  document.getElementById("conta").innerHTML =
+    `Media generale di tutte le edizioni: ${stelle(media(rows.map(r => r.medie.gen)))} · ${tot} recensioni`;
+  const anni = [...new Set(rows.map(r => r.anno))].sort().reverse();
+  document.getElementById("scheda").innerHTML = anni.map(a => {
+    const ed = rows.filter(r => r.anno === a).sort((x, z) => z.km - x.km);
+    return `<h3>Edizione ${a}</h3>
+    <div class="scorri"><table class="dati">
+      <tr><th>Data</th><th>Luogo</th><th>Km</th><th>D+</th><th>Terreno</th>
+      ${VOCI.map(v => `<th>${v[1]}</th>`).join("")}<th>Media</th><th>Rec.</th></tr>
+      ${ed.map(r => `<tr><td>${fmtData(r.data)}</td><td>${esc(r.luogo)}</td><td class="n">${r.km}</td>
+        <td class="n">${r.dplus}</td><td>${esc(r.terreno)}</td>
+        ${VOCI.map(([k]) => `<td>${stelle(r.medie[k])}</td>`).join("")}
+        <td>${stelle(r.medie.gen)}</td><td class="n">${r.n}</td></tr>`).join("")}
+    </table></div>` +
+    ed.map(r => `<h4>Recensioni ${r.km} km</h4>` + r.recensioni.map(c => `<div class="rec">
+      <small>Inviata il ${fmtData(c.inviata)} · ${VOCI.map(([k, t]) => `${t}: <b>${c[k]}</b>`).join(" · ")}</small>
+      <p>${c.commento ? esc(c.commento).replace(/\n/g, "<br>") : "<i>Nessun commento</i>"}</p></div>`).join("")).join("");
+  }).join("");
+}).catch(errore);
+</script>
+</body>
+</html>

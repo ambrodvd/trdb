@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mappa gare</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body><div class="cornice">
+<div id="testa"></div>
+
+<h2>Mappa</h2>
+<div id="filtri"></div>
+<p id="conta">Caricamento...</p>
+<div id="mappa" style="height:520px;border:2px inset #c0c0c0"></div>
+
+<div id="piede"></div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="common.js"></script>
+<script>
+pagina("mappa.html");
+const map = L.map("mappa").setView([45.5, 9], 4);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  { maxZoom: 18, attribution: "&copy; OpenStreetMap" }).addTo(map);
+const strato = L.layerGroup().addTo(map);
+let RIGHE = [];
+function disegna() {
+  strato.clearLayers();
+  const rows = filtra(RIGHE), gruppi = {};
+  let senza = 0;
+  rows.forEach(r => {
+    if (r.lat == null || r.lng == null) { senza++; return; }
+    const k = r.lat + "," + r.lng;
+    (gruppi[k] = gruppi[k] || []).push(r);
+  });
+  const punti = [];
+  Object.values(gruppi).forEach(g => {
+    const p = [g[0].lat, g[0].lng];
+    punti.push(p);
+    L.marker(p).bindPopup(`<b>${esc(g[0].luogo)}</b><br>` +
+      g.map(r => `${fmtData(r.data)} - ${linkGara(r)} (${r.km} km)`).join("<br>")).addTo(strato);
+  });
+  document.getElementById("conta").textContent = rows.length + " gare trovate" +
+    (senza ? ` (${senza} senza coordinate, non mostrate)` : "");
+  if (punti.length) map.fitBounds(punti, { padding: [30, 30], maxZoom: 10 });
+}
+disegnaFiltri(disegna);
+caricaDati().then(r => { RIGHE = r; disegna(); }).catch(errore);
+</script>
+</body>
+</html>

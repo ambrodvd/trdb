@@ -1,0 +1,41 @@
+body{background:#c0c0c0;margin:0;padding:10px;font:13px Verdana,Arial,Helvetica,sans-serif;color:#000}
+.cornice{background:#fff;max-width:1100px;margin:0 auto;padding:10px 14px;border:3px outset #e0e0e0}
+h1{font-family:"Times New Roman",Times,serif;color:#000080;font-size:30px;margin:4px 0;text-align:center}
+.sottotitolo{text-align:center;font-style:italic;color:#800000}
+h2{font-family:"Times New Roman",Times,serif;color:#000080;border-bottom:2px solid #000080;margin-top:14px}
+h3{background:#000080;color:#fff;padding:2px 6px;font-size:15px}
+h4{color:#800000;margin:14px 0 4px}
+a{color:#0000ee}a:visited{color:#551a8b}a:hover{color:#ff0000}
+marquee{display:block;background:#000;color:#ffff00;font:bold 13px "Courier New",monospace;padding:3px 0;margin:6px 0}
+.nav{text-align:center;font-weight:bold;padding:4px;background:#ffffcc;border:1px solid #999}
+.lampeggia{animation:lamp 1s steps(1) infinite;color:#ff0000;font-size:10px}
+@keyframes lamp{50%{visibility:hidden}}
+table.dati{border-collapse:collapse;font-size:12px}
+table.dati th{background:#000080;color:#fff;padding:3px 6px;border:1px solid #808080;white-space:nowrap}
+table.dati th[data-k]{cursor:pointer}
+table.dati th.ord{background:#800000}
+table.dati td{border:1px solid #808080;padding:2px 6px}
+table.dati tr:nth-child(even) td{background:#eeeeee}
+td.n{text-align:right}
+.stelle{color:#cc9900}.vuote{color:#bbbbbb}
+.scorri{overflow-x:auto}
+fieldset{border:2px groove #c0c0c0;margin:10px 0}
+legend{font-weight:bold;color:#000080}
+.filtri table{font-size:12px}
+.filtri th{font-weight:normal;font-size:11px;text-align:left}
+.filtri input,.filtri select{font-size:12px}
+table.modulo td{padding:3px 6px;vertical-align:top}
+.cal{border-collapse:collapse;width:100%;table-layout:fixed}
+.cal th{background:#000080;color:#fff;border:1px solid #808080}
+.cal td{border:1px solid #808080;vertical-align:top;height:70px;padding:2px;font-size:11px;overflow:hidden;word-wrap:break-word}
+.cal td.vuoto{background:#e0e0e0}
+.cal td.pieno{background:#ffffcc}
+.cal .g{font-weight:bold;color:#800000}
+.rec{border:1px dashed #808080;padding:6px;margin:6px 0;background:#fafafa}
+.trappola{position:absolute;left:-5000px}
+.ok{display:block;background:#ccffcc;border:2px solid #008000;padding:8px}
+.ko{display:block;background:#ffcccc;border:2px solid #cc0000;padding:8px}
+.piede{text-align:center;font-size:11px;color:#555}
+input[type=submit],input[type=reset],button{font:bold 12px Verdana,Arial,sans-serif;background:#c0c0c0;border:2px outset #ffffff;padding:3px 10px;cursor:pointer}
+input[type=submit]:active,input[type=reset]:active,button:active{border-style:inset}
+@media (max-width:600px){body{padding:4px}h1{font-size:22px}.cornice{padding:6px}}

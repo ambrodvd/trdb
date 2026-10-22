@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elenco gare</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body><div class="cornice">
+<div id="testa"></div>
+
+<h2>Elenco gare</h2>
+<div id="filtri"></div>
+<p id="conta">Caricamento...</p>
+<div class="scorri">
+<table class="dati" id="tab">
+<thead><tr>
+  <th data-k="data">Data</th><th data-k="nome">Gara</th><th data-k="luogo">Luogo</th>
+  <th data-k="km">Km</th><th data-k="dplus">D+</th><th data-k="terreno">Terreno</th>
+  <th data-k="gen">Media</th><th data-k="n">Rec.</th>
+</tr></thead>
+<tbody></tbody>
+</table>
+</div>
+
+<div id="piede"></div>
+</div>
+<script src="common.js"></script>
+<script>
+pagina("index.html");
+let RIGHE = [], ord = { k: "data", dir: -1 };
+function val(r, k) { return k === "gen" ? (r.medie.gen == null ? -1 : r.medie.gen) : r[k]; }
+function disegna() {
+  const rows = filtra(RIGHE).sort((a, b) => {
+    const x = val(a, ord.k), y = val(b, ord.k);
+    return (x > y ? 1 : x < y ? -1 : 0) * ord.dir;
+  });
+  document.getElementById("conta").textContent = rows.length + " gare trovate (clicca sulle intestazioni per ordinare)";
+  document.querySelector("#tab tbody").innerHTML = rows.map(r => `<tr>
+    <td>${fmtData(r.data)}</td><td>${linkGara(r)}</td><td>${esc(r.luogo)}</td>
+    <td class="n">${r.km}</td><td class="n">${r.dplus}</td><td>${esc(r.terreno)}</td>
+    <td>${stelle(r.medie.gen)}</td><td class="n">${r.n}</td></tr>`).join("")
+    || `<tr><td colspan="8">Nessuna gara trovata.</td></tr>`;
+  document.querySelectorAll("#tab th").forEach(th => th.classList.toggle("ord", th.dataset.k === ord.k));
+}
+document.querySelectorAll("#tab th").forEach(th => th.onclick = () => {
+  ord = { k: th.dataset.k, dir: ord.k === th.dataset.k ? -ord.dir : 1 };
+  disegna();
+});
+disegnaFiltri(disegna);
+caricaDati().then(r => { RIGHE = r; disegna(); }).catch(errore);
+</script>
+</body>
+</html>
