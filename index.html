@@ -3,68 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Elenco gare</title>
+<title>Home</title>
 <link rel="stylesheet" href="style.css">
+<style>
+.benvenuto{background:#ffffcc;border:2px dashed #800000;padding:10px 14px;margin:14px 0;font-size:14px;line-height:1.5}
+.menu-home{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.menu-home a{display:block;text-align:center;text-decoration:none;background:#c0c0c0;border:3px outset #ffffff;padding:16px 8px;color:#000080;font-weight:bold;font-size:16px}
+.menu-home a:active{border-style:inset}
+.menu-home a:hover{background:#d8d8d8;color:#ff0000}
+.menu-home .icona{display:block;font-size:34px;margin-bottom:6px}
+.menu-home small{display:block;font-weight:normal;color:#000;font-size:11px;margin-top:4px}
+@media (max-width:700px){.menu-home{grid-template-columns:1fr}}
+</style>
 </head>
 <body><div class="cornice">
 <div id="testa"></div>
 
-<h2>Elenco gare</h2>
-<div id="filtri"></div>
-<p id="conta">Caricamento...</p>
-<p class="solo-mobile">Ordina per:
-<select id="ordina">
-  <option value="data|-1">Data (più recenti)</option>
-  <option value="data|1">Data (più vecchie)</option>
-  <option value="gen|-1">Media più alta</option>
-  <option value="km|-1">Km (più lunghe)</option>
-  <option value="km|1">Km (più corte)</option>
-  <option value="dplus|-1">D+ più alto</option>
-  <option value="n|-1">Più recensite</option>
-  <option value="nome|1">Nome A-Z</option>
-</select></p>
-<div class="scorri">
-<table class="dati resp" id="tab">
-<thead><tr>
-  <th data-k="data">Data</th><th data-k="nome">Gara</th><th data-k="luogo">Luogo</th>
-  <th data-k="km">Km</th><th data-k="dplus">D+</th><th data-k="terreno">Terreno</th>
-  <th data-k="gen">Media</th><th data-k="n">Rec.</th>
-</tr></thead>
-<tbody></tbody>
-</table>
+<div class="benvenuto">
+  <b>Benvenuto!</b> Questo è un archivio di gare trail di tutto il mondo, recensite da chi le ha corse davvero.
+  Cerca una gara, guarda dove si corre e quando, oppure racconta la tua esperienza:
+  ogni recensione aiuta un altro runner a scegliere la prossima avventura.
+</div>
+
+<div class="menu-home">
+  <a href="elenco.html"><span class="icona">📋</span>ELENCO GARE<small>Cerca e filtra tutte le gare</small></a>
+  <a href="mappa.html"><span class="icona">🗺️</span>MAPPA<small>Le gare nel mondo</small></a>
+  <a href="calendario.html"><span class="icona">📅</span>CALENDARIO<small>Le gare mese per mese</small></a>
+  <a href="invia.html"><span class="icona">✍️</span>INVIA UNA GARA<small>Recensisci una gara che hai corso</small></a>
 </div>
 
 <div id="piede"></div>
 </div>
 <script src="common.js"></script>
-<script>
-pagina("index.html");
-let RIGHE = [], ord = { k: "data", dir: -1 };
-function val(r, k) { return k === "gen" ? (r.medie.gen == null ? -1 : r.medie.gen) : r[k]; }
-function disegna() {
-  const rows = filtra(RIGHE).sort((a, b) => {
-    const x = val(a, ord.k), y = val(b, ord.k);
-    return (x > y ? 1 : x < y ? -1 : 0) * ord.dir;
-  });
-  document.getElementById("conta").textContent = rows.length + " gare trovate";
-  document.querySelector("#tab tbody").innerHTML = rows.map(r => `<tr>
-    <td data-label="Data">${fmtData(r.data)}</td><td data-label="Gara">${linkGara(r)}</td><td data-label="Luogo">${esc(r.luogo)}</td>
-    <td data-label="Km" class="n">${r.km}</td><td data-label="D+" class="n">${r.dplus}</td><td data-label="Terreno">${esc(r.terreno)}</td>
-    <td data-label="Media">${stelle(r.medie.gen)}</td><td data-label="Recensioni" class="n">${r.n}</td></tr>`).join("")
-    || `<tr><td colspan="8">Nessuna gara trovata.</td></tr>`;
-  document.querySelectorAll("#tab th").forEach(th => th.classList.toggle("ord", th.dataset.k === ord.k));
-}
-document.querySelectorAll("#tab th").forEach(th => th.onclick = () => {
-  ord = { k: th.dataset.k, dir: ord.k === th.dataset.k ? -ord.dir : 1 };
-  disegna();
-});
-document.getElementById("ordina").onchange = e => {
-  const [k, d] = e.target.value.split("|");
-  ord = { k: k, dir: Number(d) };
-  disegna();
-};
-disegnaFiltri(disegna);
-caricaDati().then(r => { RIGHE = r; disegna(); }).catch(errore);
-</script>
+<script>pagina("index.html");</script>
 </body>
 </html>
