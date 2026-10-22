@@ -35,13 +35,13 @@ caricaDati().then(tutte => {
   document.getElementById("scheda").innerHTML = anni.map(a => {
     const ed = rows.filter(r => r.anno === a).sort((x, z) => z.km - x.km);
     return `<h3>Edizione ${a}</h3>
-    <div class="scorri"><table class="dati">
-      <tr><th>Data</th><th>Luogo</th><th>Km</th><th>D+</th><th>Terreno</th>
-      ${VOCI.map(v => `<th>${v[1]}</th>`).join("")}<th>Media</th><th>Rec.</th></tr>
-      ${ed.map(r => `<tr><td>${fmtData(r.data)}</td><td>${esc(r.luogo)}</td><td class="n">${r.km}</td>
-        <td class="n">${r.dplus}</td><td>${esc(r.terreno)}</td>
-        ${VOCI.map(([k]) => `<td>${stelle(r.medie[k])}</td>`).join("")}
-        <td>${stelle(r.medie.gen)}</td><td class="n">${r.n}</td></tr>`).join("")}
+    <div class="scorri"><table class="dati resp">
+      <thead><tr><th>Data</th><th>Luogo</th><th>Km</th><th>D+</th><th>Terreno</th>
+      ${VOCI.map(v => `<th>${v[1]}</th>`).join("")}<th>Media</th><th>Rec.</th></tr></thead>
+      <tbody>${ed.map(r => `<tr><td data-label="Data">${fmtData(r.data)}</td><td data-label="Luogo">${esc(r.luogo)}</td>
+        <td data-label="Km" class="n">${r.km}</td><td data-label="D+" class="n">${r.dplus}</td><td data-label="Terreno">${esc(r.terreno)}</td>
+        ${VOCI.map(([k, t]) => `<td data-label="${t}">${stelle(r.medie[k])}</td>`).join("")}
+        <td data-label="Media">${stelle(r.medie.gen)}</td><td data-label="Recensioni" class="n">${r.n}</td></tr>`).join("")}</tbody>
     </table></div>` +
     ed.map(r => `<h4>Recensioni ${r.km} km</h4>` + r.recensioni.map(c => `<div class="rec">
       <small>Inviata il ${fmtData(c.inviata)} · ${VOCI.map(([k, t]) => `${t}: <b>${c[k]}</b>`).join(" · ")}</small>

@@ -37,13 +37,16 @@ function disegna() {
   for (let d = 1; d <= giorni; d++) {
     const iso = pref + "-" + String(d).padStart(2, "0");
     const g = delMese.filter(r => r.data === iso);
-    h += `<td${g.length ? ' class="pieno"' : ""}><div class="g">${d}</div>` +
+    h += `<td${g.length ? ' class="pieno"' : ""}><div class="g">${d}</div>${g.length ? '<span class="pallino">●</span>' : ""}` +
       g.map(r => `${linkGara(r)} <small>${r.km} km</small>`).join("<br>") + `</td>`;
     if ((primo + d) % 7 === 0 && d < giorni) h += "</tr><tr>";
   }
   const resto = (7 - (primo + giorni) % 7) % 7;
   for (let i = 0; i < resto; i++) h += `<td class="vuoto"></td>`;
   h += "</tr></table>";
+  h += `<h4>Gare di ${MESI[m]} ${y}</h4>` + (delMese.length
+    ? `<ul class="lista-mese">${delMese.map(r => `<li><b>${fmtData(r.data)}</b> - ${linkGara(r)} (${r.km} km, ${r.dplus} m D+)</li>`).join("")}</ul>`
+    : "<p>Nessuna gara in questo mese.</p>");
   document.getElementById("griglia").innerHTML = h;
   document.getElementById("titolo").textContent = MESI[m] + " " + y;
   document.getElementById("conta").textContent = delMese.length + " gare in questo mese";
