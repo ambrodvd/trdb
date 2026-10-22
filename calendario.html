@@ -45,7 +45,7 @@ function disegna() {
   for (let i = 0; i < resto; i++) h += `<td class="vuoto"></td>`;
   h += "</tr></table>";
   h += `<h4>Gare di ${MESI[m]} ${y}</h4>` + (delMese.length
-    ? `<ul class="lista-mese">${delMese.map(r => `<li><b>${fmtData(r.data)}</b> - ${linkGara(r)} (${r.km} km, ${r.dplus} m D+)</li>`).join("")}</ul>`
+    ? `<ul class="lista-mese">${delMese.map(r => `<li><b>${fmtData(r.data)}</b> - ${linkGara(r)} (${r.km} km${r.dplus == null ? "" : ", " + r.dplus + " m D+"})</li>`).join("")}</ul>`
     : "<p>Nessuna gara in questo mese.</p>");
   document.getElementById("griglia").innerHTML = h;
   document.getElementById("titolo").textContent = MESI[m] + " " + y;

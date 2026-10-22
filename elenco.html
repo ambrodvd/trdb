@@ -49,7 +49,7 @@ function disegna() {
   document.getElementById("conta").textContent = rows.length + " gare trovate";
   document.querySelector("#tab tbody").innerHTML = rows.map(r => `<tr>
     <td data-label="Data">${fmtData(r.data)}</td><td data-label="Gara">${linkGara(r)}</td><td data-label="Luogo">${esc(r.luogo)}</td>
-    <td data-label="Km" class="n">${r.km}</td><td data-label="D+" class="n">${r.dplus}</td><td data-label="Terreno">${esc(r.terreno)}</td>
+    <td data-label="Km" class="n">${r.km}</td><td data-label="D+" class="n">${r.dplus == null ? "-" : r.dplus}</td><td data-label="Terreno">${esc(r.terreno)}</td>
     <td data-label="Media">${stelle(r.medie.gen)}</td><td data-label="Recensioni" class="n">${r.n}</td></tr>`).join("")
     || `<tr><td colspan="8">Nessuna gara trovata.</td></tr>`;
   document.querySelectorAll("#tab th").forEach(th => th.classList.toggle("ord", th.dataset.k === ord.k));

@@ -39,13 +39,14 @@ caricaDati().then(tutte => {
       <thead><tr><th>Data</th><th>Luogo</th><th>Km</th><th>D+</th><th>Terreno</th>
       ${VOCI.map(v => `<th>${v[1]}</th>`).join("")}<th>Media</th><th>Rec.</th></tr></thead>
       <tbody>${ed.map(r => `<tr><td data-label="Data">${fmtData(r.data)}</td><td data-label="Luogo">${esc(r.luogo)}</td>
-        <td data-label="Km" class="n">${r.km}</td><td data-label="D+" class="n">${r.dplus}</td><td data-label="Terreno">${esc(r.terreno)}</td>
+        <td data-label="Km" class="n">${r.km}</td><td data-label="D+" class="n">${r.dplus == null ? "-" : r.dplus}</td><td data-label="Terreno">${esc(r.terreno)}</td>
         ${VOCI.map(([k, t]) => `<td data-label="${t}">${stelle(r.medie[k])}</td>`).join("")}
         <td data-label="Media">${stelle(r.medie.gen)}</td><td data-label="Recensioni" class="n">${r.n}</td></tr>`).join("")}</tbody>
     </table></div>` +
-    ed.map(r => `<h4>Recensioni ${r.km} km</h4>` + r.recensioni.map(c => `<div class="rec">
+    ed.map(r => `<h4>Recensioni ${r.km} km</h4>` + (r.recensioni.map(c => `<div class="rec">
       <small>Inviata il ${fmtData(c.inviata)} · ${VOCI.map(([k, t]) => `${t}: <b>${c[k]}</b>`).join(" · ")}</small>
-      <p>${c.commento ? esc(c.commento).replace(/\n/g, "<br>") : "<i>Nessun commento</i>"}</p></div>`).join("")).join("");
+      <p>${c.commento ? esc(c.commento).replace(/\n/g, "<br>") : "<i>Nessun commento</i>"}</p></div>`).join("")
+      || `<p><i>Nessuna recensione ancora.</i> <a href="invia.html">Hai corso questa gara? Scrivi tu la prima!</a></p>`)).join("");
   }).join("");
 }).catch(errore);
 </script>
