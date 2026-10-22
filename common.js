@@ -29,7 +29,7 @@ function errore(e) {
 
 /* ====== TESTATA E PIEDE ====== */
 function pagina(attiva) {
-  const voci = [["index.html","Elenco gare"],["mappa.html","Mappa"],["calendario.html","Calendario"],
+  const voci = [["index.html","Home"],["elenco.html","Elenco gare"],["mappa.html","Mappa"],["calendario.html","Calendario"],
                 ["invia.html","Invia una gara"],["privacy.html","Privacy"]];
   const nav = voci.map(([h, t]) => {
     const nuovo = h === "invia.html" ? ` <span class="lampeggia">NEW!</span>` : "";
