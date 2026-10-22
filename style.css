@@ -58,6 +58,9 @@ textarea{max-width:100%}
 .piede{text-align:center;font-size:11px;color:#555}
 input[type=submit],input[type=reset],button{font:bold 12px Verdana,Arial,sans-serif;background:#c0c0c0;border:2px outset #ffffff;padding:3px 10px;cursor:pointer}
 input[type=submit]:active,input[type=reset]:active,button:active{border-style:inset}
+a.bottone,a.bottone:visited{display:inline-block;font:bold 13px Verdana,Arial,sans-serif;color:#000080;text-decoration:none;background:#c0c0c0;border:2px outset #ffffff;padding:6px 14px}
+a.bottone:hover{color:#ff0000}
+a.bottone:active{border-style:inset}
 
 /* ===== SMARTPHONE ===== */
 @media (max-width:700px){

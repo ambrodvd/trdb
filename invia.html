@@ -14,6 +14,8 @@
 I campi con <b>*</b> sono obbligatori.</p>
 
 <form id="f">
+<div id="precompilato"></div>
+<input type="hidden" name="idEvento" id="idEvento">
 <fieldset><legend>1. La gara</legend>
 <table class="modulo">
   <tr><td>Nome gara *</td><td><input name="gara" required maxlength="120" size="40"></td></tr>
@@ -63,6 +65,25 @@ document.getElementById("voti").innerHTML = VOCI.map(([k, t]) => `<tr><td>${t} *
   `</td></tr>`).join("");
 
 const f = document.getElementById("f");
+
+// Arrivando da una scheda gara (invia.html?id=...) compila i dati della gara
+const idGara = new URLSearchParams(location.search).get("id");
+if (idGara) caricaDati().then(tutte => {
+  const g = tutte.filter(r => r.id === idGara).pop();   // edizione più recente
+  if (!g) return;
+  f.idEvento.value = g.id;
+  f.gara.value = g.nome;
+  f.luogo.value = g.luogo;
+  f.km.value = g.km;
+  if (g.dplus != null) f.dplus.value = g.dplus;
+  const t = f.querySelector(`input[name=terreno][value="${g.terreno}"]`);
+  if (t) t.checked = true;
+  if (g.sito) f.sitoGara.value = g.sito;
+  document.getElementById("precompilato").innerHTML = `<p class="ok">Stai recensendo <b>${esc(g.nome)}</b>.
+    Abbiamo compilato i dati della gara: controllali e inserisci la <b>data dell'edizione che hai corso</b>.</p>`;
+  f.data.focus();
+}).catch(() => {});
+
 const esito = (html, cls) => document.getElementById("esito").innerHTML = `<span class="${cls || ""}">${html}</span>`;
 f.onsubmit = async e => {
   e.preventDefault();
