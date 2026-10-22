@@ -73,8 +73,7 @@ function disegnaFiltri(onChange) {
   <div class="riga">
     ${campo("Cerca (nome o luogo)", `<input name="q">`)}
     ${campo("Terreno", `<select name="terreno"><option value="">Tutti</option>${TERRENI.map(t => `<option>${t}</option>`).join("")}</select>`)}
-    ${campo("Dal", `<input type="date" name="dal">`)}
-    ${campo("Al", `<input type="date" name="al">`)}
+    ${campo("Mese", `<select name="mese"><option value="">Tutti</option>${MESI.map((t, i) => `<option value="${String(i + 1).padStart(2, "0")}">${t}</option>`).join("")}</select>`)}
     ${campo("Km da", `<input type="number" name="kmMin" min="0">`)}
     ${campo("Km a", `<input type="number" name="kmMax" min="0">`)}
     ${campo("D+ da (m)", `<input type="number" name="dpMin" min="0">`)}
@@ -98,8 +97,7 @@ function filtra(rows) {
   const q = (f.q || "").toLowerCase().trim();
   return rows.filter(r => {
     if (q && !(r.nome + " " + r.luogo).toLowerCase().includes(q)) return false;
-    if (f.dal && r.data < f.dal) return false;
-    if (f.al && r.data > f.al) return false;
+    if (f.mese && r.data.slice(5, 7) !== f.mese) return false;
     if (num(f.kmMin) != null && r.km < num(f.kmMin)) return false;
     if (num(f.kmMax) != null && r.km > num(f.kmMax)) return false;
     if (num(f.dpMin) != null && r.dplus < num(f.dpMin)) return false;
